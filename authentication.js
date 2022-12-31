@@ -29,4 +29,5 @@ module.exports = { hash, verify };
 //   console.log("password1", await verify("123456", password1));
 //   console.log("password2", await verify("123456", password2));
 //   console.log("password1 === password2", password1 === password2);
+//   console.log(password1 + "\n" + password2);
 // })();

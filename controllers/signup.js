@@ -1,12 +1,6 @@
 const { env, postNewUser, getUserCount } = require("../database/signup");
 
 const createUser = async (req, res) => {
-  const userCountRes = await getUserCount();
-  // console.log(Object.values(userCountRes.data[0][0])[0]);
-  const userCount = Object.values(userCountRes.data[0][0])[0];
-
-  req.body.id = userCount + 1;
-
   const dbRes = await postNewUser(req.body);
 
   dbRes === undefined
