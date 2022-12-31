@@ -1,4 +1,4 @@
-const { env, postNewUser, getUserCount } = require("../database/signup");
+const { env, postNewUser } = require("../database/signup");
 
 const createUser = async (req, res) => {
   const dbRes = await postNewUser(req.body);

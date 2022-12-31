@@ -44,16 +44,4 @@ const postNewUser = async (data) => {
   }
 };
 
-const getUserCount = async () => {
-  try {
-    const db = await connectToDb();
-    const userCount = await db.promise().query("SELECT COUNT(*) FROM USERS");
-    return { data: userCount };
-  } catch (err) {
-    console.error(err);
-
-    return { status: 500, error: err };
-  }
-};
-
-module.exports = { env, postNewUser, getUserCount };
+module.exports = { env, postNewUser };
