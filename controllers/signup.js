@@ -1,25 +1,23 @@
-const db = require("../database/signup");
+const { env, postNewUser, getUserCount } = require("../database/signup");
 
 const createUser = async (req, res) => {
-  const userCount = await db.getUserCount().data;
+  const userCountRes = await getUserCount();
+  // console.log(Object.values(userCountRes.data[0][0])[0]);
+  const userCount = Object.values(userCountRes.data[0][0])[0];
+
   req.body.id = userCount + 1;
 
-  const dbRes = await db.createUser(req.body);
+  const dbRes = await postNewUser(req.body);
 
-  Array.isArray(submissions) && dbRes === undefined
+  dbRes === undefined
     ? res.status(201).json({
         requestedAt: req.requestTime,
         data: req.body,
       })
-    : res.status(500).json({
-        message: {
-          // get: submissions,
-          post: dbRes,
-        },
+    : res.status(dbRes.status).json({
+        error: dbRes.error,
       });
   (err) => {
-    sendEmail(req);
-
     res.status(500).json({
       requestedAt: req.requestTime,
       error: err,
@@ -27,4 +25,4 @@ const createUser = async (req, res) => {
   };
 };
 
-module.exports = { getSubmissions, submitForm };
+module.exports = { env, createUser };

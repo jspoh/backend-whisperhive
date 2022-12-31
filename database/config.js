@@ -1,6 +1,11 @@
 require("dotenv").config({ path: "./config.env" }); // path relative to starting file (index.js) ??
 const mysql = require("mysql2");
 
+const env = {
+  PORT: process.env.PORT,
+  NODE_ENV: process.env.NODE_ENV,
+};
+
 // console.log(env);
 
 const config = {
@@ -22,4 +27,4 @@ const connectToDb = () => {
   }
 };
 
-module.exports = connectToDb;
+module.exports = { env, connectToDb };

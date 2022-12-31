@@ -1,15 +1,22 @@
-const { connectToDb } = require("./config");
+const { env, connectToDb } = require("./config");
 
 const usersTable = "users";
 
-const createUser = async (data) => {
+const postNewUser = async (data) => {
+  console.log(data);
   try {
     const db = await connectToDb();
-    db.promise().query(`INSERT INTO ${usersTable} VALUES()`);
+    await db
+      .promise()
+      .query(
+        `INSERT INTO ${usersTable} VALUES(${data.id}, '${data.username}', '${data.name}', '${data.dob}', '${data.gender}', '${data.bio}', CURRENT_TIMESTAMP, ${data.photo})`
+      );
   } catch (err) {
     console.error(err);
 
-    return { error: err };
+    return err.code === "ER_BAD_FIELD_ERROR"
+      ? { status: 400, error: err }
+      : { status: 500, error: err };
   }
 };
 
@@ -21,8 +28,8 @@ const getUserCount = async () => {
   } catch (err) {
     console.error(err);
 
-    return { error: err };
+    return { status: 500, error: err };
   }
 };
 
-module.exports = { createUser, getUserCount };
+module.exports = { env, postNewUser, getUserCount };

@@ -2,12 +2,15 @@ const express = require("express");
 const favicon = require("serve-favicon");
 const morgan = require("morgan");
 
+const signupRouter = require("./routes/signup").router;
+const env = require("./routes/signup").env;
+
 const app = express();
 
 app.use(express.json());
 // app.use(favicon(__dirname + "/portfolio/assets/avatar/avatar-circle.svg"));
 app.use(express.static(`${__dirname}/`));
-env.NODE_ENV === "development" ? app.use(morgan("dev")) : null;
+process.env.NODE_ENV === "development" ? app.use(morgan("dev")) : null;
 
 // middleware to set requestTime
 app.use((req, res, next) => {
@@ -20,8 +23,9 @@ app.use((req, res, next) => {
 
 app.get("/", (req, res) => {
   //   res.sendFile(`index.html`);
+  res.send("received");
 });
 
-// app.use("/api/contact/", contactRouter);
+app.use("/signup/", signupRouter);
 
-module.exports = app;
+module.exports = { env, app };

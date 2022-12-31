@@ -1,4 +1,4 @@
-const app = require("./app");
+const { env, app } = require("./app");
 
 app.listen(env.PORT, () => {
   console.log(
