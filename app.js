@@ -17,7 +17,13 @@ process.env.NODE_ENV === "development" ? app.use(morgan("dev")) : null;
 if (process.env.NODE_ENV === "development") {
   //middleware to enable CORS (cross origin resource sharing)
   app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    res.header(
+      "Access-Control-Allow-Origin",
+      req.headers.host === `127.0.0.1:${env.PORT}` ||
+        req.headers.host === "127.0.0.1:4200"
+        ? "http://localhost:" + req.headers.host.split(":")[1]
+        : ""
+    );
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
