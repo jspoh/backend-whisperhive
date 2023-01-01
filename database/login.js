@@ -1,3 +1,5 @@
+const uuidv4 = require("uuid").v4;
+
 const { env, tables, connectToDb } = require("./config");
 const verify = require("../authentication").verify;
 
@@ -12,9 +14,17 @@ const authenticateUser = async (data) => {
       )
   )[0][0];
 
-  return userData != undefined
-    ? await verify(data.password, userData.PASSWORD)
-    : false;
+  if (userData != undefined) {
+    const sessionId = uuidv4();
+    await db
+      .promise()
+      .query(
+        `INSERT INTO ${tables.sessions}(USER_ID, COOKIE) VALUES(${data.username}, ${sessionId})`
+      );
+    return await verify(data.password, userData.PASSWORD);
+  } else {
+    return false;
+  }
 };
 
 module.exports = { authenticateUser };

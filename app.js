@@ -6,6 +6,7 @@ const env = require("./routes/signup").env;
 
 const signupRouter = require("./routes/signup").router;
 const loginRouter = require("./routes/login").router;
+const feedRouter = require("./routes/feed").router;
 
 const app = express();
 
@@ -30,6 +31,12 @@ if (process.env.NODE_ENV === "development") {
     res.header("Access-Control-Allow-Headers", "Content-Type");
     next();
   });
+
+  // middleware for general logging
+  app.use((req, res, next) => {
+    console.log(req.headers);
+    next();
+  });
 }
 
 // middleware to set requestTime
@@ -43,6 +50,7 @@ app.use((req, res, next) => {
 
 app.use("/signup/", signupRouter);
 app.use("/login/", loginRouter);
+app.use("/feed/", feedRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + `/frontend-build/index.html`);
