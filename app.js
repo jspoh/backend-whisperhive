@@ -14,6 +14,16 @@ app.use(express.json());
 app.use(express.static(`${__dirname}/frontend-build`));
 process.env.NODE_ENV === "development" ? app.use(morgan("dev")) : null;
 
+if (process.env.NODE_ENV === "development") {
+  //middleware to enable CORS (cross origin resource sharing)
+  app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "http://localhost:4200");
+    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    next();
+  });
+}
+
 // middleware to set requestTime
 app.use((req, res, next) => {
   req.requestTime = Date();
