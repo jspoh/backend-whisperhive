@@ -1,8 +1,5 @@
-const { env, connectToDb } = require("./config");
+const { env, tables, connectToDb } = require("./config");
 const hash = require("../authentication").hash;
-
-const usersTable = "USERS";
-const authTable = "AUTH";
 
 const postNewUser = async (data) => {
   try {
@@ -15,13 +12,17 @@ const postNewUser = async (data) => {
     // );
 
     const userCount = Object.values(
-      (await db.promise().query("SELECT COUNT(*) FROM USERS"))[0][0]
+      (await db.promise().query(`SELECT COUNT(*) FROM ${tables.users}`))[0][0]
     )[0];
 
     data.user_id =
       userCount !== 0
         ? Object.values(
-            (await db.promise().query("SELECT MAX(USER_ID) FROM USERS"))[0][0]
+            (
+              await db
+                .promise()
+                .query(`SELECT MAX(USER_ID) FROM ${tables.users}`)
+            )[0][0]
           )[0] + 1
         : 0;
 
@@ -29,10 +30,10 @@ const postNewUser = async (data) => {
     await db
       .promise()
       .query(
-        `INSERT INTO ${authTable}(USER_ID, PASSWORD) VALUES(${data.user_id}, '${hashedPassword}')`
+        `INSERT INTO ${tables.auth}(USER_ID, PASSWORD) VALUES(${data.user_id}, '${hashedPassword}')`
       );
     await db.promise().query(
-      `INSERT INTO ${usersTable}(USER_ID, USERNAME, EMAIL, NAME, DOB, GENDER, BIO, CREATED_ON, PHOTO)\
+      `INSERT INTO ${tables.users}(USER_ID, USERNAME, EMAIL, NAME, DOB, GENDER, BIO, CREATED_ON, PHOTO)\
          VALUES(${data.user_id}, '${data.username}', '${data.email}', '${data.name}', '${data.dob}', '${data.gender}', '${data.bio}', CURRENT_TIMESTAMP, ${data.photo})`
     );
   } catch (err) {

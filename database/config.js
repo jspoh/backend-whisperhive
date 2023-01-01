@@ -17,6 +17,14 @@ const config = {
   debug: false,
 };
 
+const tables = {
+  auth: "AUTH",
+  users: "USERS",
+  posts: "POSTS",
+  likes: "LIKES",
+  follows: "FOLLOWS",
+};
+
 const connectToDb = () => {
   try {
     return mysql.createConnection(config);
@@ -27,4 +35,4 @@ const connectToDb = () => {
   }
 };
 
-module.exports = { env, connectToDb };
+module.exports = { env, tables, connectToDb };

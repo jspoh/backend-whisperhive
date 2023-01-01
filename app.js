@@ -2,8 +2,10 @@ const express = require("express");
 const favicon = require("serve-favicon");
 const morgan = require("morgan");
 
-const signupRouter = require("./routes/signup").router;
 const env = require("./routes/signup").env;
+
+const signupRouter = require("./routes/signup").router;
+const loginRouter = require("./routes/login").router;
 
 const app = express();
 
@@ -27,5 +29,6 @@ app.get("/", (req, res) => {
 });
 
 app.use("/signup/", signupRouter);
+app.use("/login/", loginRouter);
 
 module.exports = { env, app };

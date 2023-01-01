@@ -3,9 +3,6 @@ const { env, createUser } = require("../controllers/signup");
 
 const router = express.Router();
 
-router
-  .route("/")
-  .get((req, res) => res.send("hi"))
-  .post(createUser);
+router.route("/").post(createUser);
 
 module.exports = { env, router };
