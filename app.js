@@ -12,10 +12,12 @@ const app = express();
 app.use(express.json());
 // app.use(favicon(__dirname + "/portfolio/assets/avatar/avatar-circle.svg"));
 app.use(express.static(`./frontend-build`));
-process.env.NODE_ENV === "development" ? app.use(morgan("dev")) : null;
 
 if (process.env.NODE_ENV === "development") {
-  //middleware to enable CORS (cross origin resource sharing)
+  // enable logging
+  app.use(morgan("dev"));
+
+  // middleware to enable CORS (cross origin resource sharing)
   app.use((req, res, next) => {
     res.header(
       "Access-Control-Allow-Origin",

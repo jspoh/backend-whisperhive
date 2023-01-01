@@ -23,6 +23,7 @@ const tables = {
   posts: "POSTS",
   likes: "LIKES",
   follows: "FOLLOWS",
+  sessions: "SESSIONS",
 };
 
 const connectToDb = () => {
