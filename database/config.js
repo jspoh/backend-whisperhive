@@ -32,7 +32,7 @@ const connectToDb = () => {
   } catch (err) {
     console.error(err);
 
-    return "unable to connect to db";
+    return false;
   }
 };
 

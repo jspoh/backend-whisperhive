@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "development") {
 
   // middleware for general logging
   app.use((req, res, next) => {
-    console.log(req.headers);
+    console.log(req.headers.cookie);
     next();
   });
 }
