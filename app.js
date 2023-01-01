@@ -34,7 +34,7 @@ if (process.env.NODE_ENV === "development") {
 
   // middleware for general logging
   app.use((req, res, next) => {
-    console.log(req.headers.cookie);
+    // console.log(req.headers.cookie);
     next();
   });
 }
@@ -51,6 +51,10 @@ app.use((req, res, next) => {
 app.use("/signup/", signupRouter);
 app.use("/login/", loginRouter);
 app.use("/feed/", feedRouter);
+// app.use("/cookie/", (req, res) => {
+//   res.setHeader("set-cookie", "foo=bar");
+//   res.send("set");
+// });
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + `/frontend-build/index.html`);

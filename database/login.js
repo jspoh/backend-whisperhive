@@ -24,7 +24,6 @@ const authenticateUser = async (data) => {
       (await verify(data.password, userData.PASSWORD))
     ) {
       const sessionId = uuidv4();
-      console.log(sessionId);
       await db
         .promise()
         .query(
