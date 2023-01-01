@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 // app.use(favicon(__dirname + "/portfolio/assets/avatar/avatar-circle.svg"));
-app.use(express.static(`${__dirname}/frontend-build`));
+app.use(express.static(`./frontend-build`));
 process.env.NODE_ENV === "development" ? app.use(morgan("dev")) : null;
 
 if (process.env.NODE_ENV === "development") {
@@ -33,11 +33,11 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get("/", (req, res) => {
-  res.sendFile(`index.html`);
-});
-
 app.use("/signup/", signupRouter);
 app.use("/login/", loginRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(__dirname + `/frontend-build/index.html`);
+});
 
 module.exports = { env, app };
