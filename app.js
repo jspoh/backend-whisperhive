@@ -11,7 +11,7 @@ const app = express();
 
 app.use(express.json());
 // app.use(favicon(__dirname + "/portfolio/assets/avatar/avatar-circle.svg"));
-app.use(express.static(`${__dirname}/`));
+app.use(express.static(`${__dirname}/frontend-build`));
 process.env.NODE_ENV === "development" ? app.use(morgan("dev")) : null;
 
 // middleware to set requestTime
@@ -24,8 +24,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  //   res.sendFile(`index.html`);
-  res.send("received");
+  res.sendFile(`index.html`);
 });
 
 app.use("/signup/", signupRouter);

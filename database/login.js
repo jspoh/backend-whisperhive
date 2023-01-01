@@ -12,7 +12,9 @@ const authenticateUser = async (data) => {
       )
   )[0][0];
 
-  return await verify(data.password, userData.PASSWORD);
+  return userData != undefined
+    ? await verify(data.password, userData.PASSWORD)
+    : false;
 };
 
 module.exports = { authenticateUser };
