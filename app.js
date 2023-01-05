@@ -12,7 +12,7 @@ const app = express();
 
 app.use(express.json());
 // app.use(favicon(__dirname + "/portfolio/assets/avatar/avatar-circle.svg"));
-app.use(express.static(`./frontend-build`));
+app.use(express.static(`./frontend-build`)); // this serves pages by itself just fine. looks for index.html in dir
 
 if (process.env.NODE_ENV === "development") {
   // enable logging
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "development") {
     );
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type");
-    res.header("Access-Control-Allow-Credentials", "true");
+    res.header("Access-Control-Allow-Credentials", "true"); // for cookies with frontend
     next();
   });
 
@@ -57,7 +57,7 @@ app.use("/feed/", feedRouter);
 //   res.send("set");
 // });
 
-app.get("*", (req, res) => {
+app.get("*  // for cookies with frontend", (req, res) => {
   res.sendFile(__dirname + `/frontend-build/index.html`);
 });
 
