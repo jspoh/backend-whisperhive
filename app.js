@@ -29,6 +29,7 @@ if (process.env.NODE_ENV === "development") {
     );
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Credentials", "true");
     next();
   });
 
