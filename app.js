@@ -14,7 +14,7 @@ app.use(express.json());
 // app.use(favicon(__dirname + "/portfolio/assets/avatar/avatar-circle.svg"));
 app.use(express.static(`./frontend-build`)); // this serves pages by itself just fine. looks for index.html in dir
 
-if (process.env.NODE_ENV === "development") {
+if (env.NODE_ENV === "development") {
   // enable logging
   app.use(morgan("dev"));
 
@@ -22,10 +22,9 @@ if (process.env.NODE_ENV === "development") {
   app.use((req, res, next) => {
     res.header(
       "Access-Control-Allow-Origin",
-      req.headers.host === `127.0.0.1:${env.PORT}` ||
-        req.headers.host === "127.0.0.1:4200"
-        ? "http://localhost:" + req.headers.host.split(":")[1]
-        : ""
+      env.NODE_ENV === "development"
+        ? "http://localhost:4200"
+        : `http://localhost:${env.PORT}`
     );
     res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
     res.header("Access-Control-Allow-Headers", "Content-Type");
