@@ -5,13 +5,13 @@ const loginUser = async (req, res) => {
 
   if (dbRes.authenticated === true) {
     res
-      .status(200)
-      .json({ status: "authenticated" })
       .cookie("session", dbRes.cookie, {
         path: "/",
         secure: true,
         sameSite: "none",
-      });
+      })
+      .status(200)
+      .json({ status: "authenticated", cookie: dbRes.cookie });
   } else if (dbRes.authenticated === false) {
     res.status(401).json({ status: "wrong username, email or password" });
   } else {
