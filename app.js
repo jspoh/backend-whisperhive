@@ -1,6 +1,7 @@
 const express = require("express");
 const favicon = require("serve-favicon");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 
 const env = require("./routes/signup").env;
 
@@ -13,6 +14,7 @@ const app = express();
 app.use(express.json());
 // app.use(favicon(__dirname + "/portfolio/assets/avatar/avatar-circle.svg"));
 app.use(express.static(`./frontend-build`)); // this serves pages by itself just fine. looks for index.html in dir
+app.use(cookieParser());
 
 if (env.NODE_ENV === "development") {
   // enable logging
@@ -34,7 +36,6 @@ if (env.NODE_ENV === "development") {
 
   // middleware for general logging
   app.use((req, res, next) => {
-    // console.log(req.headers.cookie);
     next();
   });
 }
@@ -56,7 +57,7 @@ app.use("/feed/", feedRouter);
 //   res.send("set");
 // });
 
-app.get("*  // for cookies with frontend", (req, res) => {
+app.get("*", (req, res) => {
   res.sendFile(__dirname + `/frontend-build/index.html`);
 });
 

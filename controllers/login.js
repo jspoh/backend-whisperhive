@@ -8,7 +8,7 @@ const loginUser = async (req, res) => {
       .cookie("session", dbRes.cookie, {
         path: "/",
         secure: true,
-        sameSite: "none",
+        sameSite: "lax",
       })
       .status(200)
       .json({ status: "authenticated", cookie: dbRes.cookie });

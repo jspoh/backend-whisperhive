@@ -1,5 +1,7 @@
 const crypto = require("crypto");
 
+const { env, tables, connectToDb } = require("./database/config");
+
 async function hash(password) {
   return new Promise((resolve, reject) => {
     const salt = crypto.randomBytes(8).toString("hex");
@@ -21,7 +23,27 @@ async function verify(password, hash) {
   });
 }
 
-module.exports = { hash, verify };
+const getUserIdFromCookie = async (cookieValue) => {
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
+  try {
+    const userId = (
+      await db
+        .promise()
+        .query(
+          `SELECT USER_ID FROM ${tables.sessions} WHERE COOKIE = '${cookieValue}'`
+        )
+    )[0][0].USER_ID;
+    return userId;
+  } catch (err) {
+    return { status: 500, error: err };
+  }
+};
+
+module.exports = { hash, verify, getUserIdFromCookie };
 
 // (async function run() {
 //   const password1 = await hash("123456");

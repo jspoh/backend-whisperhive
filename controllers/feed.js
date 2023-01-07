@@ -1,7 +1,9 @@
-// const authenticateUser = require("../database/login").authenticateUser;
+const { getFeedData } = require("../database/feed");
 
 const getFeed = async (req, res) => {
-  res.status(200).json({ msg: "hi" });
+  const feedData = await getFeedData(req.cookies.session);
+
+  res.status(feedData.status).json({ data: feedData.data });
 };
 
 module.exports = { getFeed };
