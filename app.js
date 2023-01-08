@@ -8,6 +8,7 @@ const env = require("./routes/signup").env;
 const signupRouter = require("./routes/signup").router;
 const loginRouter = require("./routes/login").router;
 const feedRouter = require("./routes/feed").router;
+const userRouter = require("./routes/user").router;
 
 const app = express();
 
@@ -52,10 +53,7 @@ app.use((req, res, next) => {
 app.use("/signup/", signupRouter);
 app.use("/login/", loginRouter);
 app.use("/feed/", feedRouter);
-// app.use("/cookie/", (req, res) => {
-//   res.setHeader("set-cookie", "foo=bar");
-//   res.send("set");
-// });
+app.use("/user/", userRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + `/frontend-build/index.html`);

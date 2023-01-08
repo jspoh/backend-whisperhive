@@ -1,7 +1,7 @@
 const { env, tables, connectToDb } = require("./config");
 const getUserIdFromCookie = require("../authentication").getUserIdFromCookie;
 
-const getFeedData = async (cookie) => {
+const getUserData = async (cookie) => {
   const db = await connectToDb();
   if (!db) {
     return { status: 500 };
@@ -9,6 +9,7 @@ const getFeedData = async (cookie) => {
 
   const userId = await getUserIdFromCookie(cookie);
   const followingList = await getFollowings(db, userId);
+  const followerList = await getFollowers(db, userId);
   const posts = await getPosts(db, followingList);
 
   return { status: 200, data: posts };
@@ -24,6 +25,8 @@ const getFollowings = async (db, userId) => {
   )[0].map((obj) => obj.USER_ID);
   return followingList;
 };
+
+const getFollowers = async (db, userId) => {};
 
 const getPosts = async (db, followingList) => {
   const posts = (
@@ -50,4 +53,4 @@ const getPosts = async (db, followingList) => {
   return consolidated;
 };
 
-module.exports = { getFeedData };
+module.exports = { getUserData };
