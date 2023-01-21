@@ -1,4 +1,4 @@
-const { env, tables, connectToDb } = require("./config");
+const { env, tables, connectToDb, db } = require("./config");
 const getUserIdFromCookie = require("../authentication").getUserIdFromCookie;
 
 const getFeedData = async (cookie) => {

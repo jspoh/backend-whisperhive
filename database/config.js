@@ -27,12 +27,15 @@ const tables = {
   sessions: "SESSIONS",
 };
 
+let db;
+
 const connectToDb = () => {
+  if (db) return db;
   try {
-    return mysql.createConnection(config);
+    db = mysql.createConnection(config);
+    return db;
   } catch (err) {
     console.error(err);
-
     return false;
   }
 };
