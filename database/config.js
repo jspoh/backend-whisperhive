@@ -4,6 +4,7 @@ const mysql = require("mysql2");
 const env = {
   PORT: process.env.PORT,
   NODE_ENV: process.env.NODE_ENV,
+  DEV_TYPE: process.env.DEV_TYPE,
 };
 
 // console.log(env);

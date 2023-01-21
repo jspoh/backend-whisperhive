@@ -57,7 +57,6 @@ const getPosts = async (db, userId) => {
       )
   )[0];
   const postIds = posts.map((obj) => obj.POST_ID);
-  console.log(postIds);
   let comments;
   try {
     comments = (

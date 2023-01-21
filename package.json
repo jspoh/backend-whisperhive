@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "node index.js",
-    "start:dev": "set NODE_ENV=development&&nodemon --trace-warnings index.js",
+    "start:bdev": "set NODE_ENV=development&&set DEV_TYPE=backend&&nodemon --trace-warnings index.js",
+    "start:fdev": "set NODE_ENV=development&&set DEV_TYPE=frontend&&nodemon --trace-warnings index.js",
     "start:prod": "set NODE_ENV=production&&npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -25,7 +25,7 @@ if (env.NODE_ENV === "development") {
   app.use((req, res, next) => {
     res.header(
       "Access-Control-Allow-Origin",
-      env.NODE_ENV === "development"
+      env.DEV_TYPE === "frontend"
         ? "http://localhost:4200"
         : `http://localhost:${env.PORT}`
     );
