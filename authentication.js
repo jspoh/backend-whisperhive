@@ -63,7 +63,31 @@ const getUserIdFromUsername = async (username) => {
   }
 };
 
-module.exports = { hash, verify, getUserIdFromCookie, getUserIdFromUsername };
+const getUsernameFromUserId = async (userId) => {
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
+  try {
+    const username = (
+      await db
+        .promise()
+        .query(`SELECT USERNAME FROM ${tables.users} WHERE USER_ID = ${userId}`)
+    )[0][0].USERNAME;
+    return username;
+  } catch (err) {
+    return { status: 500, error: err };
+  }
+};
+
+module.exports = {
+  hash,
+  verify,
+  getUserIdFromCookie,
+  getUserIdFromUsername,
+  getUsernameFromUserId,
+};
 
 // (async function run() {
 //   const password1 = await hash("123456");

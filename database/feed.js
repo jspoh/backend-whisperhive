@@ -1,5 +1,7 @@
 const { env, tables, connectToDb, db } = require("./config");
 const getUserIdFromCookie = require("../authentication").getUserIdFromCookie;
+const getUsernameFromUserId =
+  require("../authentication").getUsernameFromUserId;
 
 const getFeedData = async (cookie) => {
   const db = await connectToDb();
@@ -11,10 +13,12 @@ const getFeedData = async (cookie) => {
   if (typeof userId !== "number") {
     return userId;
   }
+
+  const username = await getUsernameFromUserId(userId);
   const followingList = await getFollowings(db, userId);
   const posts = await getPosts(db, followingList);
 
-  return { status: 200, data: posts };
+  return { status: 200, username: username, data: posts };
 };
 
 const getFollowings = async (db, userId) => {
