@@ -43,7 +43,27 @@ const getUserIdFromCookie = async (cookieValue) => {
   }
 };
 
-module.exports = { hash, verify, getUserIdFromCookie };
+const getUserIdFromUsername = async (username) => {
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
+  try {
+    const userId = (
+      await db
+        .promise()
+        .query(
+          `SELECT USER_ID FROM ${tables.users} WHERE USERNAME = '${username}'`
+        )
+    )[0][0].USER_ID;
+    return userId;
+  } catch (err) {
+    return { status: 500, error: err };
+  }
+};
+
+module.exports = { hash, verify, getUserIdFromCookie, getUserIdFromUsername };
 
 // (async function run() {
 //   const password1 = await hash("123456");
