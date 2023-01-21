@@ -8,6 +8,9 @@ const getFeedData = async (cookie) => {
   }
 
   const userId = await getUserIdFromCookie(cookie);
+  if (typeof userId !== Number) {
+    return userId;
+  }
   const followingList = await getFollowings(db, userId);
   const posts = await getPosts(db, followingList);
 
