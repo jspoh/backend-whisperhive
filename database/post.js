@@ -21,6 +21,10 @@ const getPosts = async (db, postedToArr) => {
   );
 
   const postIds = await Promise.all(posts.map(async (post) => post.POST_ID));
+
+  // if no posts
+  if (postIds.length === 0) return posts;
+
   let comments = (
     await db
       .promise()
