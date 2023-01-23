@@ -105,6 +105,7 @@ module.exports = {
   getUserIdFromCookie,
   getUserIdFromUsername,
   getUsernameFromUserId,
+  getNameFromUserId,
 };
 
 // (async function run() {
