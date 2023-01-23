@@ -99,6 +99,24 @@ const getNameFromUserId = async (userId) => {
   }
 };
 
+const getNameFromUsername = async (username) => {
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
+  try {
+    const name = (
+      await db
+        .promise()
+        .query(`SELECT NAME FROM ${tables.users} WHERE USERNAME = ${username}`)
+    )[0][0].NAME;
+    return name;
+  } catch (err) {
+    return { status: 500, error: err };
+  }
+};
+
 module.exports = {
   hash,
   verify,
@@ -106,6 +124,7 @@ module.exports = {
   getUserIdFromUsername,
   getUsernameFromUserId,
   getNameFromUserId,
+  getNameFromUsername,
 };
 
 // (async function run() {
