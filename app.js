@@ -2,6 +2,7 @@ const express = require("express");
 const favicon = require("serve-favicon");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
+const { getUserIdFromCookie } = require("./authentication");
 
 const env = require("./routes/signup").env;
 
@@ -50,6 +51,11 @@ app.use((req, res, next) => {
   next();
 });
 
+app.route("/authentication/").get(async (req, res) => {
+  if (typeof (await getUserIdFromCookie(req.cookies.session)) === "number")
+    res.status(200).send(true);
+  else res.status(403).send(false);
+});
 app.use("/signup/", signupRouter);
 app.use("/login/", loginRouter);
 app.use("/feed/", feedRouter);
