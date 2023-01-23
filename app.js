@@ -2,7 +2,10 @@ const express = require("express");
 const favicon = require("serve-favicon");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
-const { getUserIdFromCookie } = require("./authentication");
+const {
+  getUserIdFromCookie,
+  getUsernameFromUserId,
+} = require("./authentication");
 
 const env = require("./routes/signup").env;
 
@@ -52,9 +55,13 @@ app.use((req, res, next) => {
 });
 
 app.route("/authentication/").get(async (req, res) => {
-  if (typeof (await getUserIdFromCookie(req.cookies.session)) === "number")
-    res.status(200).send(true);
-  else res.status(403).send(false);
+  const userId = await getUserIdFromCookie(req.cookies.session);
+  if (typeof userId !== "number") {
+    res.status(200).json({ loggedIn: false, username: "" });
+    return;
+  }
+  const username = await getUsernameFromUserId(userId);
+  res.status(200).json({ loggedIn: true, username: username });
 });
 app.use("/signup/", signupRouter);
 app.use("/login/", loginRouter);
