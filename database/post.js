@@ -16,6 +16,8 @@ const getPosts = async (db, postedToArr) => {
     posts.map(async (post) => {
       post.FROM_USERNAME = await getUsernameFromUserId(post.FROM_USER_ID);
       post.TO_USERNAME = await getUsernameFromUserId(post.TO_USER_ID);
+      post.FROM_NAME = await getUsernameFromUserId(post.FROM_USER_ID);
+      post.TO_NAME = await getUsernameFromUserId(post.TO_USER_ID);
       return post;
     })
   );
@@ -36,6 +38,8 @@ const getPosts = async (db, postedToArr) => {
     comments.map(async (comment) => {
       comment.FROM_USERNAME = await getUsernameFromUserId(comment.FROM_USER_ID);
       comment.TO_USERNAME = await getUsernameFromUserId(comment.TO_USER_ID);
+      comment.FROM_NAME = await getUsernameFromUserId(comment.FROM_USER_ID);
+      comment.TO_NAME = await getUsernameFromUserId(comment.TO_USER_ID);
       return comment;
     })
   );
