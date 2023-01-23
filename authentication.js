@@ -109,7 +109,9 @@ const getNameFromUsername = async (username) => {
     const name = (
       await db
         .promise()
-        .query(`SELECT NAME FROM ${tables.users} WHERE USERNAME = ${username}`)
+        .query(
+          `SELECT NAME FROM ${tables.users} WHERE USERNAME = '${username}'`
+        )
     )[0][0].NAME;
     return name;
   } catch (err) {
