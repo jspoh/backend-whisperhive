@@ -24,8 +24,9 @@ const getUserData = async (username, sessionCookie) => {
   if ((sessionCookie !== null) | undefined) {
     const currentUserId = await getUserIdFromCookie(sessionCookie);
     currentUserUsername = await getUsernameFromUserId(currentUserId);
+  } else {
+    currentUserUsername = "";
   }
-  currentUserUsername = "";
 
   return {
     status: 200,
