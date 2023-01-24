@@ -4,7 +4,7 @@ const getUsernameFromUserId =
   require("../authentication").getUsernameFromUserId;
 const getPosts = require("./post").getPosts;
 
-const getFeedData = async (cookie) => {
+const getFeedData = async (postsToRetrieve, cookie) => {
   const db = await connectToDb();
   if (!db) {
     return { status: 500 };
@@ -17,7 +17,7 @@ const getFeedData = async (cookie) => {
 
   const username = await getUsernameFromUserId(userId);
   const followingList = await getFollowings(db, userId);
-  const posts = await getPosts(db, followingList);
+  const posts = await getPosts(followingList, postsToRetrieve);
 
   return { status: 200, username: username, data: posts };
 };

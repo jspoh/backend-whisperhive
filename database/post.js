@@ -4,12 +4,23 @@ const getUsernameFromUserId =
   require("../authentication").getUsernameFromUserId;
 const getNameFromUserId = require("../authentication").getNameFromUserId;
 
-const getPosts = async (db, postedToArr) => {
+/**
+ * Get posts posted to an array of users
+ * @param {number} postedToArr Accepts an array of userIds
+ * @param {number} count Refers to the number of posts to retrieve
+ * @returns an array of 10 posts ordered by date in descending order
+ */
+const getPosts = async (postedToArr, count) => {
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
   const posts = (
     await db
       .promise()
       .query(
-        `SELECT * FROM ${tables.posts} WHERE TO_USER_ID IN (${postedToArr}) AND IS_COMMENT = FALSE ORDER BY POSTED_ON DESC`
+        `SELECT * FROM ${tables.posts} WHERE TO_USER_ID IN (${postedToArr}) AND IS_COMMENT = FALSE ORDER BY POSTED_ON DESC LIMIT ${count}`
       )
   )[0];
 

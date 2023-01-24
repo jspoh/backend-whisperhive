@@ -1,7 +1,8 @@
 const { getFeedData } = require("../database/feed");
 
 const getFeed = async (req, res) => {
-  const feedData = await getFeedData(req.cookies.session);
+  const postsToRetrieve = req.query.posts;
+  const feedData = await getFeedData(postsToRetrieve, req.cookies.session);
 
   res
     .status(feedData.status)
