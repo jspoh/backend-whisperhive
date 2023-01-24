@@ -1,10 +1,11 @@
+const { getUserIdFromUsername } = require("../authentication");
 const { env, tables, connectToDb, db } = require("./config");
 const getUsernameFromUserId =
   require("../authentication").getUsernameFromUserId;
 const getNameFromUserId = require("../authentication").getNameFromUserId;
 
 const getPosts = async (db, postedToArr) => {
-  let posts = (
+  const posts = (
     await db
       .promise()
       .query(
@@ -13,7 +14,7 @@ const getPosts = async (db, postedToArr) => {
   )[0];
 
   // add usernames to post object
-  posts = await Promise.all(
+  await Promise.all(
     posts.map(async (post) => {
       post.FROM_USERNAME = await getUsernameFromUserId(post.FROM_USER_ID);
       post.TO_USERNAME = await getUsernameFromUserId(post.TO_USER_ID);
@@ -28,14 +29,14 @@ const getPosts = async (db, postedToArr) => {
   // if no posts
   if (postIds.length === 0) return posts;
 
-  let comments = (
+  const comments = (
     await db
       .promise()
       .query(`SELECT * FROM ${tables.posts} WHERE COMMENT_ON IN (${postIds})`)
   )[0];
 
   // add usernames to comment object
-  comments = await Promise.all(
+  await Promise.all(
     comments.map(async (comment) => {
       comment.FROM_USERNAME = await getUsernameFromUserId(comment.FROM_USER_ID);
       comment.TO_USERNAME = await getUsernameFromUserId(comment.TO_USER_ID);
@@ -56,4 +57,33 @@ const getPosts = async (db, postedToArr) => {
   return consolidated;
 };
 
-module.exports = { getPosts };
+const createPost = async (post) => {
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
+  [post.toUserId, post.fromUserId] = await Promise.all([
+    getUserIdFromUsername(post.to),
+    getUserIdFromUsername(post.from),
+  ]);
+
+  try {
+    const postCount = (
+      await db.promise().query(`SELECT COUNT(*) FROM ${tables.posts}`)
+    )[0][0]["COUNT(*)"];
+
+    await db.promise().query(`INSERT INTO ${
+      tables.posts
+    }(POST_ID, FROM_USER_ID, TO_USER_ID, MESSAGE, POSTED_ON, IS_ANON, IS_COMMENT, COMMENT_ON)\
+    VALUES(${postCount + 1}, ${post.fromUserId}, ${post.toUserId}, '${
+      post.content
+    }', CURRENT_TIMESTAMP, ${post.anon}, ${post.comment}, ${post.comment_on})`);
+
+    return { status: 200, data: post };
+  } catch (error) {
+    return { status: 500, error: error };
+  }
+};
+
+module.exports = { getPosts, createPost };

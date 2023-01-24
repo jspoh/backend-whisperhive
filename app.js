@@ -13,6 +13,7 @@ const signupRouter = require("./routes/signup").router;
 const loginRouter = require("./routes/login").router;
 const feedRouter = require("./routes/feed").router;
 const userRouter = require("./routes/user").router;
+const postRouter = require("./routes/post").router;
 
 const app = express();
 
@@ -67,6 +68,7 @@ app.use("/signup/", signupRouter);
 app.use("/login/", loginRouter);
 app.use("/feed/", feedRouter);
 app.use("/user/", userRouter);
+app.use("/post/", postRouter);
 
 app.get("*", (req, res) => {
   res.sendFile(__dirname + `/frontend-build/index.html`);
