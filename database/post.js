@@ -83,7 +83,7 @@ const createPost = async (post) => {
     const newPost = (
       await db
         .promise()
-        .query(`SELECT * FROM ${tables.posts} WHERE POST_ID = ${postCount}`)
+        .query(`SELECT * FROM ${tables.posts} WHERE POST_ID = ${postCount + 1}`)
     )[0][0];
 
     return { status: 200, data: newPost };
