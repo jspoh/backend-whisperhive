@@ -9,7 +9,7 @@ const getPosts = async (db, postedToArr) => {
     await db
       .promise()
       .query(
-        `SELECT * FROM ${tables.posts} WHERE TO_USER_ID IN (${postedToArr}) AND IS_COMMENT = FALSE`
+        `SELECT * FROM ${tables.posts} WHERE TO_USER_ID IN (${postedToArr}) AND IS_COMMENT = FALSE ORDER BY POSTED_ON DESC`
       )
   )[0];
 
@@ -80,7 +80,13 @@ const createPost = async (post) => {
       post.content
     }', CURRENT_TIMESTAMP, ${post.anon}, ${post.comment}, ${post.comment_on})`);
 
-    return { status: 200, data: post };
+    const newPost = (
+      await db
+        .promise()
+        .query(`SELECT * FROM ${tables.posts} WHERE POST_ID = ${postCount}`)
+    )[0][0];
+
+    return { status: 200, data: newPost };
   } catch (error) {
     return { status: 500, error: error };
   }
