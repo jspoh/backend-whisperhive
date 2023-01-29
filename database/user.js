@@ -31,7 +31,6 @@ const getUserData = async (username, postsToRetrieve, sessionCookie) => {
       })
     ),
   ]);
-  console.log(followingUsernameList, followerUsernameList);
 
   const posts = await getPosts([userId], postsToRetrieve);
   let currentUserUsername;
