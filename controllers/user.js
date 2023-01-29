@@ -3,7 +3,8 @@ const { getUserData } = require("../database/user");
 
 const getUser = async (req, res) => {
   const postsToRetrieve = req.query.posts;
-  const username = req.path.replace("/", "");
+  const username = req.path.split("/")[1];
+  console.log(username);
   const name = await getNameFromUsername(username);
   const userData = await getUserData(
     username,
@@ -15,4 +16,8 @@ const getUser = async (req, res) => {
     .json({ username: username, name: name, data: userData.data });
 };
 
-module.exports = { getUser };
+const followAction = async (req, res) => {
+  res.send("ok follow");
+};
+
+module.exports = { getUser, followAction };
