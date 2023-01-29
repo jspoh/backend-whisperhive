@@ -1,5 +1,5 @@
 const { getNameFromUsername } = require("../authentication");
-const { getUserData } = require("../database/user");
+const { getUserData, onFollowAction } = require("../database/user");
 
 const getUser = async (req, res) => {
   const postsToRetrieve = req.query.posts;
@@ -17,7 +17,8 @@ const getUser = async (req, res) => {
 };
 
 const followAction = async (req, res) => {
-  res.send("ok follow");
+  const dbRes = await onFollowAction(req.body);
+  res.status(dbRes.status).json(dbRes.data);
 };
 
 module.exports = { getUser, followAction };

@@ -61,4 +61,26 @@ const getFollowers = async (db, userId) => {
   return followerList;
 };
 
-module.exports = { getUserData };
+const onFollowAction = async (followEvent) => {
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
+  try {
+    if (follow) {
+      db.promise().query(
+        `INSERT INTO ${tables.follows}(USER_ID, FOLLOWER_ID) VALUES( ${followEvent.viewingUser}, ${followEvent.currentUser})`
+      );
+    } else {
+      db.promise().query(
+        `DELETE FROM ${tables.follows} WHERE USER_ID = ${followEvent.viewingUser} AND FOLLOWER_ID = ${followEvent.currentUser}`
+      );
+    }
+    return { status: 200, data: followEvent };
+  } catch (err) {
+    return { status: 500, data: err };
+  }
+};
+
+module.exports = { getUserData, onFollowAction };
