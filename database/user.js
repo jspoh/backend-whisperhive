@@ -19,6 +19,20 @@ const getUserData = async (username, postsToRetrieve, sessionCookie) => {
   }
   const followingList = await getFollowings(db, userId);
   const followerList = await getFollowers(db, userId);
+  const [followingUsernameList, followerUsernameList] = await Promise.all([
+    Promise.all(
+      followingList.map(async (userId) => {
+        return await getUsernameFromUserId(userId);
+      })
+    ),
+    Promise.all(
+      followerList.map(async (userId) => {
+        return await getUsernameFromUserId(userId);
+      })
+    ),
+  ]);
+  console.log(followingUsernameList, followerUsernameList);
+
   const posts = await getPosts([userId], postsToRetrieve);
   let currentUserUsername;
   if ((sessionCookie !== null) | undefined) {
@@ -32,8 +46,8 @@ const getUserData = async (username, postsToRetrieve, sessionCookie) => {
     status: 200,
     data: {
       currentUser: currentUserUsername,
-      followingList: followingList,
-      followerList: followerList,
+      followingList: followingUsernameList,
+      followerList: followerUsernameList,
       posts: posts,
     },
   };
