@@ -69,13 +69,17 @@ const onFollowAction = async (followEvent) => {
 
   try {
     if (follow) {
-      db.promise().query(
-        `INSERT INTO ${tables.follows}(USER_ID, FOLLOWER_ID) VALUES( ${followEvent.viewingUser}, ${followEvent.currentUser})`
-      );
+      await db
+        .promise()
+        .query(
+          `INSERT INTO ${tables.follows}(USER_ID, FOLLOWER_ID) VALUES( ${followEvent.viewingUser}, ${followEvent.currentUser})`
+        );
     } else {
-      db.promise().query(
-        `DELETE FROM ${tables.follows} WHERE USER_ID = ${followEvent.viewingUser} AND FOLLOWER_ID = ${followEvent.currentUser}`
-      );
+      await db
+        .promise()
+        .query(
+          `DELETE FROM ${tables.follows} WHERE USER_ID = ${followEvent.viewingUser} AND FOLLOWER_ID = ${followEvent.currentUser}`
+        );
     }
     return { status: 200, data: followEvent };
   } catch (err) {
@@ -83,4 +87,32 @@ const onFollowAction = async (followEvent) => {
   }
 };
 
-module.exports = { getUserData, onFollowAction };
+const currentUserIsFollowing = async (currentUser, showingUser) => {
+  if (currentUser === showingUser) {
+    return null;
+  }
+
+  const db = await connectToDb();
+  if (!db) {
+    return { status: 500 };
+  }
+
+  const currentUserId = await getUserIdFromUsername(currentUser);
+  const showingUserId = await getUserIdFromUsername(showingUser);
+
+  try {
+    const isFollowing = !!(
+      await db
+        .promise()
+        .query(
+          `SELECT * FROM ${tables.follows} WHERE USER_ID = ${showingUserId} AND FOLLOWER_ID = ${currentUserId}`
+        )
+    )[0][0];
+
+    return isFollowing;
+  } catch (err) {
+    return { status: 500, data: err };
+  }
+};
+
+module.exports = { getUserData, onFollowAction, currentUserIsFollowing };
