@@ -18,14 +18,12 @@ const getUser = async (req, res) => {
     userData.data.currentUser,
     username
   );
-  res
-    .status(userData.status)
-    .json({
-      username: username,
-      name: name,
-      following: following,
-      data: userData.data,
-    });
+  res.status(userData.status).json({
+    username: username,
+    name: name,
+    following: following,
+    data: userData.data,
+  });
 };
 
 const followAction = async (req, res) => {

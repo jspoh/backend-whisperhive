@@ -80,18 +80,23 @@ const onFollowAction = async (followEvent) => {
     return { status: 500 };
   }
 
+  const [viewingUserId, currentUserId] = await Promise.all([
+    getUserIdFromUsername(followEvent.viewingUser),
+    getUserIdFromUsername(followEvent.currentUser),
+  ]);
+
   try {
-    if (follow) {
+    if (followEvent.follow) {
       await db
         .promise()
         .query(
-          `INSERT INTO ${tables.follows}(USER_ID, FOLLOWER_ID) VALUES( ${followEvent.viewingUser}, ${followEvent.currentUser})`
+          `INSERT INTO ${tables.follows}(USER_ID, FOLLOWER_ID) VALUES(${viewingUserId}, ${currentUserId})`
         );
     } else {
       await db
         .promise()
         .query(
-          `DELETE FROM ${tables.follows} WHERE USER_ID = ${followEvent.viewingUser} AND FOLLOWER_ID = ${followEvent.currentUser}`
+          `DELETE FROM ${tables.follows} WHERE USER_ID = ${viewingUserId} AND FOLLOWER_ID = ${currentUserId}`
         );
     }
     return { status: 200, data: followEvent };
